@@ -5,7 +5,7 @@ import menu
 machine_water = menu.resources['water']
 machine_milk = menu.resources['milk']
 machine_coffe = menu.resources['coffee']
-machine_money = 0  # $
+machine_money = 0.00  # $
 machine_run = True
 
 print(menu.MENU['espresso']['cost'])
@@ -19,15 +19,15 @@ def checkingridents(item):
     checker = 0
 
     if machine_water < water:
-        print("Not Enough Water")
+        print("Sorry there is Not Enough Water")
         checker += 1
     if machine_coffe < coffee:
-        print("Not Enough Coffee")
+        print("Sorry there is Not Enough Coffee")
         checker += 1
     if 'milk' in choice:
         milk = choice['milk']
         if machine_milk < milk:
-            print("Not Enought Milk")
+            print("Sorry there is Not Enought Milk")
             checker += 1
     return checker
 
@@ -50,7 +50,7 @@ def use_milk(item, machine_cost):
         milk_left = machine_cost - use_milk
         return milk_left
     else:
-        milk_left = 0
+        milk_left = machine_cost
         return milk_left
 
 def use_water(item, machine_cost):
@@ -67,9 +67,10 @@ def checkuser(input):
     if input == 'espresso' or input == 'latte' or input == 'cappuccino':
         return 'ready'
     elif input == 'report':
-        print(f"Water: {machine_water}")
-        print(f"Coffee: {machine_coffe}")
-        print(f"Milk: {machine_milk}")
+        print(f"Water: {machine_water}ml")
+        print(f"Coffee: {machine_coffe}g")
+        print(f"Milk: {machine_milk}ml")
+        print(f"Money: ${machine_money:.2f}")
     else:
         print("Not a Valid Option")
 
@@ -82,27 +83,31 @@ while machine_run == True:
         can_afford = True
     while can_afford == True:
         supply = checkingridents(user_choice)
-        print(supply)
         if supply == 0:
            print("Please insert coin.")
            user_money = calcmoney()
-           item_cost = int(menu.MENU[user_choice]['cost'])
+           item_cost = float(menu.MENU[user_choice]['cost'])
            if user_money >= item_cost:
                user_change = user_money - item_cost
                if user_change > 0:
+                   machine_money += item_cost
                    print(f"Here is ${user_change:.2f} in change")
-
                    machine_water = use_water(user_choice, machine_water)
                    machine_coffe = use_coffee(user_choice, machine_coffe)
                    machine_milk = use_milk(user_choice, machine_milk)
-                   print(f"Water left: {machine_water}\nCoffee left: {machine_coffe}\nMilk left: {machine_milk}")
-
+                   print(f"Here is your {user_choice}☕ Enjoy!")
+                   can_afford = False
            if user_money < item_cost:
                print("Sorry that's not enough money. Money refunded.")
                can_afford = False
+        if supply > 0:
+            can_afford = False
 
 
 
 
 
-    machine_run = False
+
+
+
+    machine_run = True

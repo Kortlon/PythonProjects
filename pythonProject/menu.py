@@ -25,8 +25,8 @@ MENU = {
 }
 
 resources = {
-    "water": 200,
-    "milk": 250,
-    "coffee": 100,
+    "water": 1000,
+    "milk": 2500,
+    "coffee": 1000,
 }
 
