@@ -1,6 +1,6 @@
 import menu
 
-print(menu.MENU)
+#print(menu.MENU)
 
 machine_water = menu.resources['water']
 machine_milk = menu.resources['milk']
@@ -44,6 +44,24 @@ def calcmoney():
     sum += p * .01
     return sum
 
+def use_milk(item, machine_cost):
+    if 'milk' in menu.MENU[item]['ingredients']:
+        use_milk =int(menu.MENU[item]['ingredients']['milk'])
+        milk_left = machine_cost - use_milk
+        return milk_left
+    else:
+        milk_left = 0
+        return milk_left
+
+def use_water(item, machine_cost):
+    use_water = int(menu.MENU[item]['ingredients']['water'])
+    water_left = machine_cost - use_water
+    return water_left
+
+def use_coffee(item, machine_cost):
+    use_coffee = int(menu.MENU[item]['ingredients']['coffee'])
+    coffee_left = machine_cost - use_coffee
+    return coffee_left
 
 def checkuser(input):
     if input == 'espresso' or input == 'latte' or input == 'cappuccino':
@@ -59,7 +77,7 @@ def checkuser(input):
 while machine_run == True:
     user_option = ''
     while user_option != 'ready':
-        user_choice = str(input("What would you like? (expresso/latte/cappuccino):")).lower()
+        user_choice = str(input("What would you like? (espresso/latte/cappuccino):")).lower()
         user_option = checkuser(user_choice)
         can_afford = True
     while can_afford == True:
@@ -69,13 +87,20 @@ while machine_run == True:
            print("Please insert coin.")
            user_money = calcmoney()
            item_cost = int(menu.MENU[user_choice]['cost'])
-           if user_money > item_cost:
+           if user_money >= item_cost:
                user_change = user_money - item_cost
                if user_change > 0:
                    print(f"Here is ${user_change:.2f} in change")
+
+                   machine_water = use_water(user_choice, machine_water)
+                   machine_coffe = use_coffee(user_choice, machine_coffe)
+                   machine_milk = use_milk(user_choice, machine_milk)
+                   print(f"Water left: {machine_water}\nCoffee left: {machine_coffe}\nMilk left: {machine_milk}")
+
            if user_money < item_cost:
                print("Sorry that's not enough money. Money refunded.")
                can_afford = False
+
 
 
 
